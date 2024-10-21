@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import goalService from './goalService'
 
 const initialState = {
-  goals: [],
+  goals: [],  // Asegurarse de que goals sea un array
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -80,7 +80,11 @@ export const goalSlice = createSlice({
       .addCase(createGoal.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.goals.push(action.payload)
+        if (Array.isArray(state.goals)) {
+          state.goals.push(action.payload)  // Asegura que state.goals sea un array y agrega la nueva transacción
+        } else {
+          state.goals = [action.payload]  // Si no lo es, lo convierte en array con el payload
+        }
       })
       .addCase(createGoal.rejected, (state, action) => {
         state.isLoading = false
@@ -93,7 +97,7 @@ export const goalSlice = createSlice({
       .addCase(getGoals.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.goals = action.payload
+        state.goals = action.payload  // Obtiene todas las transacciones
       })
       .addCase(getGoals.rejected, (state, action) => {
         state.isLoading = false
@@ -107,7 +111,7 @@ export const goalSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         state.goals = state.goals.filter(
-          (goal) => goal._id !== action.payload.id
+          (goal) => goal._id !== action.payload.id  // Elimina la transacción por ID
         )
       })
       .addCase(deleteGoal.rejected, (state, action) => {
@@ -120,3 +124,5 @@ export const goalSlice = createSlice({
 
 export const { reset } = goalSlice.actions
 export default goalSlice.reducer
+
+

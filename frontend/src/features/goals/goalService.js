@@ -2,13 +2,16 @@ import axios from 'axios'
 
 const API_URL = '/api/goals/'
 
-// Create new goal
+// Create new goal (with recipient details)
 const createGoal = async (goalData, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }
+
+  // Verificar que se estén enviando los datos correctos
+  console.log("Sending transaction data:", goalData)
 
   const response = await axios.post(API_URL, goalData, config)
 
@@ -48,3 +51,5 @@ const goalService = {
 }
 
 export default goalService
+
+
